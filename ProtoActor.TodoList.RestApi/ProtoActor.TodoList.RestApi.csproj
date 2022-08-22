@@ -7,7 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
+        <PackageReference Include="Proto.Actor" Version="1.0.0-rc2.36" />
+        <PackageReference Include="Proto.Persistence.Sqlite" Version="1.0.0-rc2.36" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
 
 </Project>
