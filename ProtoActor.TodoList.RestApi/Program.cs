@@ -1,11 +1,30 @@
+using Proto;
+using Proto.DependencyInjection;
+using ProtoActor.TodoList.RestApi.Actors;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+// builder.Services.AddSingleton<IActor, >()
+builder.Services.AddSingleton(provider =>
+{
+    var actorSystemConfig = ActorSystemConfig
+        .Setup();
+    // Props props = Props.FromFunc(_ => new TodoServiceActor());
+    var actorSystem = new ActorSystem(actorSystemConfig)
+        .WithServiceProvider(provider);
+    
+    // actorSystem.Root.SpawnNamed(
+    //     
+    // )
+    return actorSystem;
+});
+
+builder.Services.AddTransient<TodoServiceActor>();
+
+// Props.FromProducer(() => )
 
 var app = builder.Build();
 

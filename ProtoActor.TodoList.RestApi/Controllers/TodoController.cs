@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using ProtoActor.TodoList.RestApi.Dto;
+using Proto;
+using Proto.DependencyInjection;
+using ProtoActor.TodoList.RestApi.Actors;
+using ProtoActor.TodoList.RestApi.Messages;
 
 namespace ProtoActor.TodoList.RestApi.Controllers;
 
@@ -8,18 +11,25 @@ namespace ProtoActor.TodoList.RestApi.Controllers;
 public class TodoController : ControllerBase
 {
     private readonly ILogger _logger;
+
+    private readonly ActorSystem _actorSystem;
+    // private readonly IRootContext _rootContext;
     
-    public TodoController(ILogger<TodoController> logger)
+    public TodoController(ILogger<TodoController> logger, ActorSystem actorSystem)
     {
         _logger = logger;
+        _actorSystem = actorSystem;
+        // _rootContext = rootContext;
     }
 
     [HttpPost]
-    public Task<TodoItemDto> Create(TodoItemDto todoItem)
+    public Task AddTodoItem(TodoItem todoItem)
     {
         _logger.LogInformation("[Create] todoItem={}", todoItem);
 
-        // TODO: 구현 필요
-        return null;
+        var props = _actorSystem.DI().PropsFor<TodoServiceActor>();
+        var pid = _actorSystem.Root.Spawn(props);
+        _actorSystem.Root.Send(pid, new Add(todoItem));
+        return Task.CompletedTask;
     }
 }

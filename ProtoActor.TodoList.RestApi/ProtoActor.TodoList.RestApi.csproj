@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Boost.Proto.Actor.DependencyInjection" Version="1.0.0-rc2.31.550" />
         <PackageReference Include="Proto.Actor" Version="1.0.0-rc2.36" />
         <PackageReference Include="Proto.Persistence.Sqlite" Version="1.0.0-rc2.36" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
