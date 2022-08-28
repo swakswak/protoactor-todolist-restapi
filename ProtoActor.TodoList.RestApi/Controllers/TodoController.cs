@@ -13,13 +13,11 @@ public class TodoController : ControllerBase
     private readonly ILogger _logger;
 
     private readonly ActorSystem _actorSystem;
-    // private readonly IRootContext _rootContext;
     
     public TodoController(ILogger<TodoController> logger, ActorSystem actorSystem)
     {
         _logger = logger;
         _actorSystem = actorSystem;
-        // _rootContext = rootContext;
     }
 
     [HttpPost]
