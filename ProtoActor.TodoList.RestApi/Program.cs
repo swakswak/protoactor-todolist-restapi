@@ -9,12 +9,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton(provider =>
 {
-    var actorSystemConfig = ActorSystemConfig
-        .Setup();
-    var actorSystem = new ActorSystem(actorSystemConfig)
-        .WithServiceProvider(provider);
-    
-    return actorSystem;
+    var actorSystemConfig = ActorSystemConfig.Setup();
+    return new ActorSystem(actorSystemConfig).WithServiceProvider(provider);
 });
 
 builder.Services.AddTransient<TodoServiceActor>();
