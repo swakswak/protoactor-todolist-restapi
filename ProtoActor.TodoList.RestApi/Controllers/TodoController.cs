@@ -10,24 +10,25 @@ namespace ProtoActor.TodoList.RestApi.Controllers;
 [Route("todos")]
 public class TodoController : ControllerBase
 {
-    private readonly ILogger _logger;
+    private ILogger Logger { get; }
 
-    private readonly ActorSystem _actorSystem;
-    
-    public TodoController(ILogger<TodoController> logger, ActorSystem actorSystem)
+    private IRootContext RootContext { get; }
+
+    public TodoController(ILogger<TodoController> logger, IRootContext rootContext)
     {
-        _logger = logger;
-        _actorSystem = actorSystem;
+        Logger = logger;
+        RootContext = rootContext;
     }
 
     [HttpPost]
-    public Task AddTodoItem(TodoItem todoItem)
+    public async Task<TodoItem> AddTodoItem(TodoItem todoItem)
     {
-        _logger.LogInformation("[Create] todoItem={}", todoItem);
+        Logger.LogInformation("[Create] todoItem={}", todoItem);
 
-        var props = _actorSystem.DI().PropsFor<TodoServiceActor>();
-        var pid = _actorSystem.Root.Spawn(props);
-        _actorSystem.Root.Send(pid, new Add(todoItem));
-        return Task.CompletedTask;
+        var response = await RootContext.RequestAsync<TodoItem>(
+            new PID(RootContext.System.Address, "TodoService"),
+            new Add(todoItem)
+        );
+        return await Task.FromResult(response);
     }
 }

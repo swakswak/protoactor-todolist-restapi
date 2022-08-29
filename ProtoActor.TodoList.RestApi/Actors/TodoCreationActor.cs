@@ -3,13 +3,13 @@ using ProtoActor.TodoList.RestApi.Messages;
 
 namespace ProtoActor.TodoList.RestApi.Actors;
 
-public class TodoServiceActor : IActor
+public class TodoCreationActor : IActor
 {
-    private readonly ILogger _logger;
+    private ILogger Logger { get; }
 
-    public TodoServiceActor(ILogger<TodoServiceActor> logger)
+    public TodoCreationActor(ILogger<TodoCreationActor> logger)
     {
-        _logger = logger;
+        Logger = logger;
     }
 
     public Task ReceiveAsync(IContext context)
@@ -18,7 +18,7 @@ public class TodoServiceActor : IActor
 
         if (message is Add add)
         {
-            _logger.LogInformation("[Add] todoItem={}", add.TodoItem);
+            Logger.LogInformation("[Add] todoItem={}", add.TodoItem);
         }
         
         return Task.CompletedTask;
