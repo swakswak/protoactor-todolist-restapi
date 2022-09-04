@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Proto;
-using Proto.DependencyInjection;
 using ProtoActor.TodoList.RestApi.Actors;
 using ProtoActor.TodoList.RestApi.Messages;
 
@@ -10,15 +9,15 @@ namespace ProtoActor.TodoList.RestApi.Controllers;
 [Route("todos")]
 public class TodoController : ControllerBase
 {
-    private ILogger Logger { get; }
-
-    private IRootContext RootContext { get; }
-
     public TodoController(ILogger<TodoController> logger, IRootContext rootContext)
     {
         Logger = logger;
         RootContext = rootContext;
     }
+
+    private ILogger Logger { get; }
+
+    private IRootContext RootContext { get; }
 
     [HttpPost]
     public async Task<TodoItem> AddTodoItem(TodoItem todoItem)
@@ -26,7 +25,7 @@ public class TodoController : ControllerBase
         Logger.LogInformation("[Create] todoItem={}", todoItem);
 
         var response = await RootContext.RequestAsync<TodoItem>(
-            new PID(RootContext.System.Address, "TodoService"),
+            new PID(RootContext.System.Address, nameof(ActorNames.TodoService)),
             new Add(todoItem)
         );
         return await Task.FromResult(response);
